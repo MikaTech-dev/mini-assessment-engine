@@ -15,7 +15,7 @@ Initialize virtual environment with
 Get CMD prompt to use virtual environment
 
     .venv\Scripts\activate
-    ./.venv/Scrips/activate
+    ./.venv/Scripts/activate
 
 Install Django
 
