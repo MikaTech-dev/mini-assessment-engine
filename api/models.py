@@ -43,7 +43,7 @@ class Submission(models.Model):
         ('graded', 'Graded'),
     ]
 
-    # Links the submission to the inbuilt User model
+    # Link the submission to the inbuilt User model via FK
     student = models.ForeignKey(User, on_delete=models.CASCADE)
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
     submitted_at = models.DateTimeField(auto_now_add=True)
