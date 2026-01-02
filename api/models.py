@@ -2,11 +2,10 @@ from django.db import models
 
 # Create your models here.
 from django.contrib.auth.models import User  # Inbuilt auth User model
-from django.utils import timezone
 
 class Exam(models.Model):
     title = models.CharField(max_length=255)
-    duration = models.DurationField() 
+    duration = models.DurationField()
     course_name = models.CharField(max_length=255)
     metadata = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -21,14 +20,17 @@ class Question(models.Model):
         ('SA', 'Short Answer'),
     ]
 
-    exam = models.ForeignKey(Exam, related_name='questions', on_delete=models.CASCADE)
+    exam: Exam = models.ForeignKey(Exam, related_name='questions', on_delete=models.CASCADE)
     question_text = models.TextField()
-    question_type = models.CharField(max_length=3, choices=QUESTION_TYPES, default='MCQ')   # using choices
+    question_type = models.CharField(
+        max_length=3, choices=QUESTION_TYPES,
+          default='MCQ'
+          )   # using choices
 
     # Flexible storage for options (e.g. ["A", "B", "C"]) and correct answers
-    options = models.JSONField(default=dict, blank=True, help_text="For MCQs: {'options': ['A', 'B', 'C']}")
-    correct_answers = models.JSONField(help_text="e.g. {'answer': 'B'}")
-    
+    options = models.JSONField(
+        default=dict, blank=True, help_text="For MCQs: {'options': ['A', 'B', 'C']}")
+    correct_answers = models.JSONField(default=dict, help_text="e.g. {'answer': 'B'}")
     order = models.PositiveSmallIntegerField(default=1)
 
     class Meta:
