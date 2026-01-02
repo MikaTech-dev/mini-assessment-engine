@@ -27,4 +27,8 @@ Start the project
 
 Run server
 
-    python ./assessment_engine/manage.py runserver
+    python manage.py runserver
+
+Migrate database models
+
+    python manage.py makemigrations
