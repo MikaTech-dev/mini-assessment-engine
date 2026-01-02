@@ -7,4 +7,5 @@ disable=missing-module-docstring,
         missing-class-docstring,
         missing-function-docstring,
         too-few-public-methods,
-        invalid-name
+        invalid-name,
+        imported-auth-user
