@@ -9,3 +9,4 @@ disable=missing-module-docstring,
         too-few-public-methods,
         invalid-name,
         imported-auth-user
+        too-many-ancestors
