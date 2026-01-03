@@ -43,7 +43,7 @@ class SubmissionSerializer(serializers.ModelSerializer):
             'answers'
             ]
         # These fields will br created/filled by the grading.service(TBD), not by the student
-        read_only_fields = ['total_score', 'feedback', 'status', 'submitted_at']    
+        read_only_fields = ['total_score', 'feedback', 'status', 'submitted_at']
     def create(self, validated_data):
         """
         Handles creating the Submission AND the nested Answers in one go.
