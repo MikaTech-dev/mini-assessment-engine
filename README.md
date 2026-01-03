@@ -32,3 +32,6 @@ Run server
 Migrate database models
 
     python manage.py makemigrations
+
+Run pylint, load the django plugin, point to your django settings and specify what directory to lint
+    pylint --load-plugins pylint_django --django-settings-module=assessment_engine.settings ./api/
