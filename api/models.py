@@ -37,7 +37,8 @@ class Question(models.Model):
         ordering = ['order']
 
     def __str__(self):
-        return f"{self.exam.title} - Q{self.order}"
+        examObject: Exam = self.exam
+        return f"{examObject} - Q{self.order}"
 
 class Submission(models.Model):
     STATUS_CHOICES = [
@@ -49,7 +50,6 @@ class Submission(models.Model):
     student = models.ForeignKey(User, on_delete=models.CASCADE)
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
     submitted_at = models.DateTimeField(auto_now_add=True)
-    
     # Allow score and feedback to be blank (nullable) initially until graded
     total_score = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     feedback = models.TextField(blank=True)
@@ -62,7 +62,6 @@ class Answer(models.Model):
     submission = models.ForeignKey(Submission, related_name='answers', on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     student_answer = models.JSONField()
-    
     # Optional: store individual score per question if needed later
     is_correct = models.BooleanField(default=False, blank=True)
 
