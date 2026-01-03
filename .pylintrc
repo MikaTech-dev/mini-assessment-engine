@@ -1,10 +1,13 @@
 [MASTER]
 load-plugins=pylint_django
 ignore=migrations
+fail-under=8.0
 
 [MESSAGES CONTROL]
 disable=missing-module-docstring,
         missing-class-docstring,
         missing-function-docstring,
         too-few-public-methods,
-        invalid-name
+        invalid-name,
+        imported-auth-user,
+        too-many-ancestors,
