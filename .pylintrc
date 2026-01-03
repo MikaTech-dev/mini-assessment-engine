@@ -8,5 +8,5 @@ disable=missing-module-docstring,
         missing-function-docstring,
         too-few-public-methods,
         invalid-name,
-        imported-auth-user
-        too-many-ancestors
+        imported-auth-user,
+        too-many-ancestors,
