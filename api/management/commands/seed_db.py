@@ -43,7 +43,7 @@ class Command(BaseCommand):
             question_text="What is the unit of Force?",
             question_type='MCQ',
             # Storing the list of options as a dictionary
-            options={'options': ['Newton', 'Joule', 'Pascal', 'Watt']}, 
+            options={'options': ['Newton', 'Joule', 'Pascal', 'Watt']},
             # Stores the correct answer in the answer key
             correct_answers={'answer': 'Newton'},
             order=1
