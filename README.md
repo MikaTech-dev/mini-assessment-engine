@@ -1,5 +1,7 @@
 # Mini Assessment Engine (Acad AI)
-
+![Issues](https://img.shields.io/github/issues/MikaTech-dev/mini-assessment-engine?style=for-the-badge&color=purple)
+![Stars](https://img.shields.io/github/stars/MikaTech-dev/mini-assessment-engine?style=for-the-badge&color=white)
+![Forks](https://img.shields.io/github/forks/MikaTech-dev/mini-assessment-engine?style=for-the-badge&color=purple)  
 A Django-based REST API for managing exams, questions, and student submissions. 
 Features automated grading with a modular design that supports both keyword matching and Generative AI (Gemini) feedback.
 
