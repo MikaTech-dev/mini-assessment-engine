@@ -20,4 +20,4 @@ jobs:
         pip install pylint-django djangorestframework django
     - name: Analysing the code with pylint (together with plugins)
       run: |
-        pylint --load-plugins pylint_django --django-settings-module=assessment_engine.settings api/ assessment_engine/ api/
+        pylint --load-plugins pylint_django --django-settings-module=assessment_engine.settings api/ assessment_engine/
