@@ -1,0 +1,253 @@
+{
+	"info": {
+		"_postman_id": "03abc79c-ae0e-4d4f-bb15-7a8cb56235be",
+		"name": "Django Assessment Engine (Pro)",
+		"description": "A complete API collection for the Mini Assessment Engine.\n\nIncludes endpoints for:\n- **Admin**: System management login.\n- **Student**: Exam listing, secure submissions, and history.\n- **Authentication**: Session/Basic auth handling with CSRF scripts included.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Admin",
+			"description": "Administrative endpoints for system management.",
+			"item": [
+				{
+					"name": "Admin Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var xsrfCookie = postman.getResponseCookie(\"csrftoken\");",
+									"postman.setEnvironmentVariable('csrftoken', xsrfCookie.value);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "admin123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/admin/login/",
+							"host": ["{{baseURL}}"],
+							"path": ["admin", "login", ""]
+						},
+						"description": "Logs in the Superuser to access the Django Admin panel."
+					}
+				}
+			]
+		},
+		{
+			"name": "Student",
+			"description": "Main student workflow: Login -> View Exams -> Submit -> View Results.",
+			"item": [
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "Student Login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var xsrfCookie = postman.getResponseCookie(\"csrftoken\");",
+											"postman.setEnvironmentVariable('csrftoken', xsrfCookie.value);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "student",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "password123",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/api-auth/login/",
+									"host": ["{{baseURL}}"],
+									"path": ["api-auth", "login", ""]
+								},
+								"description": "Authenticates a student and sets the session cookie."
+							}
+						}
+					]
+				},
+				{
+					"name": "Exams",
+					"description": "Read-only endpoints for viewing available assessments.",
+					"item": [
+						{
+							"name": "Get All Exams",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/api/exams/",
+									"host": ["{{baseURL}}"],
+									"path": ["api", "exams", ""]
+								},
+								"description": "Lists all available exams with their associated questions."
+							}
+						},
+						{
+							"name": "Get Exam by ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/api/exams/:id",
+									"host": ["{{baseURL}}"],
+									"path": ["api", "exams", ":id"],
+									"variable": [
+										{
+											"key": "id",
+											"value": "5",
+											"description": "The ID of the exam to retrieve."
+										}
+									]
+								},
+								"description": "Retrieves details for a specific exam."
+							}
+						}
+					]
+				},
+				{
+					"name": "Submissions",
+					"description": "Endpoints for submitting answers and viewing graded history.",
+					"item": [
+						{
+							"name": "Submit an Exam",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var xsrfCookie = postman.getResponseCookie(\"csrftoken\");",
+											"postman.setEnvironmentVariable('csrftoken', xsrfCookie.value);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-CSRFToken",
+										"value": "{{csrftoken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"exam\": 5,\n    \"answers\": [\n        {\n            \"question\": 13,\n            \"student_answer\": {\n                \"choice\": \"Newton\"\n            }\n        },\n        {\n            \"question\": 15,\n            \"student_answer\": {\n                \"text\": \"Velocity is speed with direction.\"\n            }\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/api/submissions/",
+									"host": ["{{baseURL}}"],
+									"path": ["api", "submissions", ""]
+								},
+								"description": "Submits answers for grading. Triggers the AI feedback engine."
+							},
+							"response": [
+								{
+									"name": "Error: Invalid ID",
+									"originalRequest": {
+										"method": "POST",
+										"body": {
+											"mode": "raw",
+											"raw": "{\"exam\": 5, \"answers\": [{\"question\": 999, \"student_answer\": {\"choice\": \"A\"}}]}"
+										},
+										"url": "{{baseURL}}/api/submissions/"
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [],
+									"body": "{\"answers\": [{\"question\": [\"Invalid pk \\\"999\\\" - object does not exist.\"]}]}"
+								}
+							]
+						},
+						{
+							"name": "Get All Submissions",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/api/submissions/",
+									"host": ["{{baseURL}}"],
+									"path": ["api", "submissions", ""]
+								},
+								"description": "Retrieves the logged-in student's submission history."
+							}
+						},
+						{
+							"name": "Get Submission by ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/api/submissions/:id",
+									"host": ["{{baseURL}}"],
+									"path": ["api", "submissions", ":id"],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1",
+											"description": "The ID of the submission to view."
+										}
+									]
+								},
+								"description": "Views the specific details, score, and AI feedback for one submission."
+							}
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "http://127.0.0.1:8000"
+		},
+		{
+			"key": "csrftoken",
+			"value": ""
+		}
+	]
+}
