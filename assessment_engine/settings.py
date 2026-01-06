@@ -39,7 +39,31 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'api',
+    'drf_spectacular',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        # By default, lock everything down
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    # Swagger autoschema config
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+# Spectacular config
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Mini Assessment Engine API',
+    'DESCRIPTION': 'A simple assessment engine with automated AI grading logic.',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
