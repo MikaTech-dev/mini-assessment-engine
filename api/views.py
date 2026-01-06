@@ -4,6 +4,7 @@
 from rest_framework import viewsets, permissions
 from .models import Exam, Submission
 from .serializers import ExamSerializer, SubmissionSerializer
+from .services import grade_submission
 
 class ExamViewSet(viewsets.ReadOnlyModelViewSet):
     """
@@ -26,5 +27,6 @@ class SubmissionViewSet(viewsets.ModelViewSet):
         return Submission.objects.filter(student=self.request.user)
 
     def perform_create(self, serializer):
-        # link submission to the actual user 
-        serializer.save(student=self.request.user)
+        # link submission to the actual user
+        submission= serializer.save(student=self.request.user)
+        grade_submission(submission)
