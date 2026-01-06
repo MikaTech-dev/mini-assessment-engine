@@ -27,6 +27,6 @@ class SubmissionViewSet(viewsets.ModelViewSet):
         return Submission.objects.filter(student=self.request.user)
 
     def perform_create(self, serializer):
-        # link submission to the actual user 
+        # link submission to the actual user
         submission= serializer.save(student=self.request.user)
         grade_submission(submission)
