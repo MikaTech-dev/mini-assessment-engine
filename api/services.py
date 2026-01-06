@@ -1,9 +1,9 @@
+from .grading_helper import genFeedback
 def grade_submission(submission):
     """
     Modular grading service to evaluate a submission.
     Currently implements a Mock Grading Service using keyword matching.
     """
-    # TODO: Implement AI integration to help grade a and provide feedback on SA (Short answer questions)
     total_questions = submission.exam.questions.count()
     correct_count = 0
     feedback_notes = []
@@ -30,6 +30,7 @@ def grade_submission(submission):
             expected_keywords = question.correct_answers.get('keywords', [])
             student_text = ans.student_answer.get('text', '').lower()
 
+            # TODO: Replace current matching logic with regex to prevent "cat" in "vacation" from evaluating to true
             # Checks for how many keywords match
             matches = [word for word in expected_keywords if word.lower() in student_text]
             if len(matches) >= len(expected_keywords) * 0.666: # 66% match threshold (1 matching keyword at least...)
@@ -37,8 +38,14 @@ def grade_submission(submission):
                 correct_count += 1
             else:
                 ans.is_correct = False
-                feedback_notes.append(f"Q{question.order}: Missed key concepts.")
-
+            #  Send student's question info to Gemini API to generate feedback
+            ai_feedback = genFeedback(
+                student_question=question.question_text,
+                student_answer=student_text,
+                expected_keywords=expected_keywords
+            )
+            # Append each question's feedback
+            feedback_notes.append(f"Q{question.order} Feedback: {ai_feedback}")
         ans.save()
 
     # Calculate final score
