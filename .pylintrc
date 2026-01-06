@@ -11,3 +11,4 @@ disable=missing-module-docstring,
         invalid-name,
         imported-auth-user,
         too-many-ancestors,
+        line-too-long
